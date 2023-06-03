@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <settings>
-
+    <language value="zh-cn" />
+    <last-open>
+        <li id="1" value="a" />
+        <li id="2" value="b" />
+        <li id="3" value="c" />
+        <li id="4" value="d" />
+        <li id="5" value="e" />
+    </last-open>
 </settings>

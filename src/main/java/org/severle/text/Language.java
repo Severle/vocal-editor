@@ -1,9 +1,17 @@
 package org.severle.text;
 
-public class Lang {
+public class Language {
     private static final String langPath = "lang/";
     private static final String langSubFix = ".json";
+    private static Language instance;
 
+    static {
+
+    }
+
+    public static Language getInstance() {
+        return instance;
+    }
 
 
 
