@@ -33,6 +33,13 @@ public class MainForm {
 
     }
 
+    private void initMenu() {
+        menuBar = new JMenuBar();
+        JMenu menu;
+        menu = new JMenu();
+        menu.setText("");
+    }
+
     private void closeWindow() {
         executor.shutdown();
     }
