@@ -1,4 +1,9 @@
 {
-  "menu.first.menu.title": "文件",
-  "menu.second.menu.title": "窗口"
+  "main.title": "编辑器",
+  "menu.file.menu.title": "文件",
+  "menu.file.menu.item.new_file.text": "新建",
+  "menu.file.menu.item.open.text": "打开",
+  "menu.file.menu.item.save.text": "保存",
+  "menu.file.menu.item.save_as.text": "另存为",
+  "menu.window.menu.title": "窗口"
 }

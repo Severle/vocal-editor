@@ -1,7 +1,11 @@
 package org.severle.ui;
 
 import com.formdev.flatlaf.FlatIntelliJLaf;
+import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
+import com.intellij.uiDesigner.core.Spacer;
+import lombok.extern.log4j.Log4j2;
+import org.severle.text.Text;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,9 +14,9 @@ import java.awt.event.WindowEvent;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+@Log4j2
 public class MainForm {
     private final ExecutorService executor;
-
 
     static {
         try {
@@ -23,40 +27,75 @@ public class MainForm {
     }
 
     {
-        executor = Executors.newFixedThreadPool(8);
+        log.info("Init window.");
+        this.executor = Executors.newFixedThreadPool(8);
+        this.frame = new JFrame(Text.translate("main.title"));
+        this.menuBar = new JMenuBar();
+        this.frame.setJMenuBar(this.menuBar);
     }
 
+    private JFrame frame;
     private JPanel mainPanel;
+    private JToolBar operationAreaToolBar;
     private JMenuBar menuBar;
 
     public MainForm() {
-
+        initMenu();
     }
 
     private void initMenu() {
-        menuBar = new JMenuBar();
+        log.info("Init menu.");
         JMenu menu;
-        menu = new JMenu();
-        menu.setText("");
+        menu = new JMenu(Text.translate("menu.file.menu.title"));
+        initMenuItem(menu, "menu.file.menu.item.new_file.text", this::fileMenuNewItemOnClick);
+        initMenuItem(menu, "menu.file.menu.item.open.text", this::fileMenuOpenItemOnClick);
+        initMenuItem(menu, "menu.file.menu.item.save.text", this::fileMenuSaveItemOnClick);
+        initMenuItem(menu, "menu.file.menu.item.save_as.text", this::fileMenuSaveAsItemOnClick);
+        this.menuBar.add(menu);
     }
 
-    private void closeWindow() {
-        executor.shutdown();
+    private void initMenuItem(JMenu menu, String key, Runnable task) {
+        JMenuItem item = new JMenuItem(Text.translate(key));
+        item.addActionListener(e -> {
+            executor.submit(task);
+        });
+        menu.add(item);
+    }
+
+    private void fileMenuNewItemOnClick() {
+        log.info("New a project.");
+    }
+
+    private void fileMenuOpenItemOnClick() {
+        log.info("Open a project.");
+    }
+
+    private void fileMenuSaveItemOnClick() {
+        log.info("Save a project.");
+    }
+
+    private void fileMenuSaveAsItemOnClick() {
+        log.info("Save as a project.");
+    }
+
+    private void closingWindow() {
+        log.info("Closing window.");
+        this.executor.shutdown();
     }
 
     public void start() {
-        JFrame frame = new JFrame();
-        frame.setContentPane(mainPanel);
-        frame.setSize(new Dimension(800, 600));
-        frame.setLocationRelativeTo(null);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.addWindowListener(new WindowAdapter() {
+        log.info("Main form start.");
+        this.frame.setContentPane(mainPanel);
+        this.frame.setSize(new Dimension(800, 600));
+        this.frame.setLocationRelativeTo(null);
+        this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.frame.addWindowListener(new WindowAdapter() {
             @Override
-            public void windowClosed(WindowEvent e) {
-                closeWindow();
+            public void windowClosing(WindowEvent e) {
+                closingWindow();
             }
         });
-        frame.setVisible(true);
+        this.frame.setVisible(true);
     }
 
     {
@@ -75,7 +114,11 @@ public class MainForm {
      */
     private void $$$setupUI$$$() {
         mainPanel = new JPanel();
-        mainPanel.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        mainPanel.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
+        final Spacer spacer1 = new Spacer();
+        mainPanel.add(spacer1, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        operationAreaToolBar = new JToolBar();
+        mainPanel.add(operationAreaToolBar, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(-1, 20), null, 0, false));
     }
 
     /**
@@ -84,4 +127,5 @@ public class MainForm {
     public JComponent $$$getRootComponent$$$() {
         return mainPanel;
     }
+
 }

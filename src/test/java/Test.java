@@ -1,8 +1,10 @@
+import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import lombok.extern.log4j.Log4j2;
 
+import javax.swing.*;
 import java.io.InputStreamReader;
 import java.util.Map;
 import java.util.Objects;
@@ -10,7 +12,12 @@ import java.util.Objects;
 @Log4j2
 public class Test {
     public static void main(String[] args) throws Exception {
-        log.debug("s");
+        UIManager.setLookAndFeel(new FlatIntelliJLaf());
+        JTable table = new JTable();
+        log.debug(table.getSelectionForeground());
+        log.debug(table.getSelectionBackground());
+        log.debug(table.getForeground());
+        log.debug(table.getBackground());
     }
 
     private static void json() {
