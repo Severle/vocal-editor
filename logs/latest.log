@@ -1,0 +1,12 @@
+23:55:05.978 [AWT-EventQueue-0] DEBUG Test2 - Click 2
+23:55:05.992 [AWT-EventQueue-0] DEBUG Test2 - Focus: true
+23:55:05.992 [AWT-EventQueue-0] DEBUG Test2 - Editable: true
+23:55:09.227 [AWT-EventQueue-0] DEBUG Test2 - Focus lost
+23:55:10.213 [AWT-EventQueue-0] DEBUG Test2 - Click 2
+23:55:10.220 [AWT-EventQueue-0] DEBUG Test2 - Focus: true
+23:55:10.220 [AWT-EventQueue-0] DEBUG Test2 - Editable: true
+23:55:15.234 [AWT-EventQueue-0] DEBUG Test2 - Focus lost
+23:55:18.997 [AWT-EventQueue-0] DEBUG Test2 - Click 2
+23:55:19.003 [AWT-EventQueue-0] DEBUG Test2 - Focus: true
+23:55:19.003 [AWT-EventQueue-0] DEBUG Test2 - Editable: true
+23:55:23.958 [AWT-EventQueue-0] DEBUG Test2 - Focus lost
