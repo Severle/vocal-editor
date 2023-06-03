@@ -25,12 +25,7 @@ public class Initializer {
 
     public static Language.CountryLangCode getSettingLanguage() {
         String value = settings.getRootElement().element("language").attributeValue("value");
-        for (Language.CountryLangCode countryLangCode : Language.CountryLangCode.values()) {
-            if (value.equals(countryLangCode.code)) {
-                return countryLangCode;
-            }
-        }
-        return null;
+        return Language.CountryLangCode.getCodeByString(value);
     }
 
     public static String [] getLastOpenProjects() {
@@ -42,5 +37,17 @@ public class Initializer {
         }
 
         return strings;
+    }
+
+    public static boolean isMaxWindow() {
+        String s = settings.getRootElement().element("is-max-window").attributeValue("value");
+        if (s.equals("true")) {
+            return true;
+        } else if (s.equals("false")) {
+            return false;
+        } else {
+            log.error("Error settings with max-window");
+            throw new RuntimeException("Error settings with max-window");
+        }
     }
 }
