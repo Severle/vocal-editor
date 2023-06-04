@@ -14,6 +14,8 @@ public class NoteComponent extends JComponent {
     private boolean isResizable = false;
     private int mouseX;
     private int mouseY;
+    private int pressedMouseX;
+    private int pressedMouseY;
 
     {
         this.addMouseMotionListener(new MouseMotionAdapter() {
@@ -22,21 +24,24 @@ public class NoteComponent extends JComponent {
                 super.mouseDragged(e);
                 mouseX = e.getX();
                 mouseY = e.getY();
-                log.debug("MouseX: {}, MouseY: {}", mouseX, mouseY);
 
                 if (isResizable) {
                     // Resize it.
-                    int dx = mouseX - (getX() + getWidth());
-                    log.debug("dx: {}", dx);
+                    int dx = mouseX - getWidth();
                     int newWidth = getWidth() + dx;
                     if (newWidth >= getMinimumSize().width) {
                         setSize(newWidth, getHeight());
+                        revalidate();
+                        repaint();
                     }
-                    revalidate();
-                    repaint();
                 } else {
                     // Move it.
-
+                    int dx = mouseX - pressedMouseX;
+                    int dy = mouseY - pressedMouseY;
+                    Point location = getLocation();
+                    location.x += dx;
+                    location.y += dy;
+                    setLocation(location);
                 }
             }
 
@@ -46,7 +51,11 @@ public class NoteComponent extends JComponent {
                 mouseY = e.getY();
                 log.debug("MouseX: {}, MouseY: {}", mouseX, mouseY);
 
-                if ((mouseX < (getX() + getWidth()) && (getX() + getWidth()) - mouseX < 5) && (mouseY > getY() && mouseY < getY() + getHeight())) {
+                int rightBound = getX() + getWidth();
+                int topBound = getY();
+                int bottomBound = getY() + getHeight();
+                //(mouseX < rightBound && rightBound - mouseX < 5) && (mouseY > topBound && mouseY < bottomBound) 全局坐标时候
+                if ((mouseX < getWidth() && getWidth() - mouseX < 10) && (mouseY < getHeight() && mouseY > 0)) {
                     log.debug("In right bound.");
                     isResizable = true;
                 } else {
@@ -66,6 +75,8 @@ public class NoteComponent extends JComponent {
                 log.debug("Mouse pressed.");
                 if (!isPressed) {
                     isPressed = true;
+                    pressedMouseX = e.getX();
+                    pressedMouseY = e.getY();
                     log.debug("Pressed.");
                 }
                 super.mousePressed(e);
