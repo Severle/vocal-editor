@@ -36,6 +36,7 @@ public class Test2 {
                     textField.setEditable(true);
                     textField.requestFocus();
                     textField.getCaret().setVisible(true);
+
                     log.debug("Focus: {}", textField.isFocusable());
                     log.debug("Editable: {}", textField.isEditable());
                 }
@@ -46,6 +47,7 @@ public class Test2 {
             public void focusLost(FocusEvent e) {
                 log.debug("Focus lost");
                 textField.setEditable(false);
+                textField.setCaretPosition(0);
             }
         });
         textField.addKeyListener(new KeyAdapter() {
@@ -54,6 +56,7 @@ public class Test2 {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     log.debug("Typed Enter.");
                     textField.setEditable(false);
+                    textField.setCaretPosition(0);
                 }
             }
         });

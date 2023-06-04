@@ -10,7 +10,9 @@ import java.awt.event.MouseEvent;
 @Log4j2
 public class JNote extends JPanel {
     private boolean selected = false;
-    private Color background = Color.CYAN.darker();
+    private static final Color COMMON_BACKGROUND_COLOR = Color.GREEN;
+    private static final Color SELECTION_BACKGROUND_COLOR = Color.CYAN;
+    private Color color = COMMON_BACKGROUND_COLOR.darker();
 
     {
         this.addMouseListener(new MouseAdapter() {
@@ -18,7 +20,7 @@ public class JNote extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 int count = e.getClickCount();
                 if (count == 1) {
-                    log.debug("Mouse click.");
+//                    log.debug("Mouse click.");
                     setSelected(!selected);
                     log.debug("Selection: {}", selected);
                     repaint();
@@ -29,15 +31,19 @@ public class JNote extends JPanel {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                log.debug("Mouse entered.");
-                background = background.brighter();
+//                log.debug("Mouse entered.");
+                setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                color = COMMON_BACKGROUND_COLOR.brighter();
                 repaint();
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                log.debug("Mouse exited.");
-                background = background.darker();
+//                log.debug("Mouse exited.");
+                setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                if (!selected) {
+                    color = COMMON_BACKGROUND_COLOR.darker();
+                }
                 repaint();
             }
         });
@@ -49,6 +55,11 @@ public class JNote extends JPanel {
 
     public void setSelected(boolean selected) {
         this.selected = selected;
+        if (selected) {
+            color = COMMON_BACKGROUND_COLOR.brighter();
+        } else {
+            color = COMMON_BACKGROUND_COLOR.darker();
+        }
     }
 
     public JNote() {
@@ -61,33 +72,21 @@ public class JNote extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        log.debug("paint component");
-
-        log.debug("Repaint Panel.");
+        Graphics2D g2d = (Graphics2D) g;
+        this.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
         int x = this.getX();
         int y = this.getY();
-        log.debug("x: {}, y: {}", x, y);
         int width = this.getWidth();
         int height = this.getHeight();
-        log.debug("Width: {}, Height: {}", width, height);
-        float alignmentX = this.getAlignmentX();
-        float alignmentY = this.getAlignmentY();
-        log.debug("AlignmentX: {}, AlignmentY: {}", alignmentX, alignmentY);
 
-        g.setColor(background);
-        g.fillRect(x, y, width, height);
-        g.setColor(Color.BLACK);
-        g.drawLine(x, y, x + width, y);
-        g.drawLine(x, y + height - 1, x + width, y + height - 1);
-        FontMetrics fontMetrics = g.getFontMetrics();
-        String text;
-        if (selected) {
-            text = "Selected";
-        } else {
-            text = "Unselected";
-        }
-        g.drawString(text, getTextAlignCenterX(width, text, fontMetrics), getTextAlignCenterY(height, fontMetrics));
-        log.debug("Fill rect ok");
+//        if (selected) {
+//            g2d.setColor(SELECTION_BACKGROUND_COLOR);
+//        } else {
+//            g2d.setColor(COMMON_BACKGROUND_COLOR);
+//        }
+        g2d.setColor(color);
+        g2d.fillRect(x, y, width, height);
+        FontMetrics fontMetrics = g2d.getFontMetrics();
     }
 
     private static int getTextAlignCenterX(int width, String text, FontMetrics fontMetrics) {
