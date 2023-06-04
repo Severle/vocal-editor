@@ -1,5 +1,5 @@
 import com.formdev.flatlaf.FlatIntelliJLaf;
-import org.severle.ui.component.JNote;
+import org.severle.ui.component.NoteComponent;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +15,7 @@ public class TestComponent {
         JPanel panel = new JPanel();
         panel.setLayout(null);
 
-        JNote note = new JNote(new Dimension(200, 40));
+        NoteComponent note = new NoteComponent(100, 40);
         panel.add(note);
 
         frame.setContentPane(panel);
