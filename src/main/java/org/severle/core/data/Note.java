@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
+import org.severle.core.manager.NoteManager;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,4 +18,5 @@ public class Note {
     private String lyric;
     private String phoneme;
     private int nativePitch;
+    private NoteManager.NoteGroup group = NoteManager.NoteGroup.NONE_GROUP;
 }
