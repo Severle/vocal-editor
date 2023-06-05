@@ -14,6 +14,7 @@ import org.severle.system.ProjectOpenList;
 import org.severle.system.impl.P7FileChooseFilter;
 import org.severle.text.Text;
 import org.severle.ui.dialog.NotSaveConfirmDialog;
+import org.severle.ui.dialog.SettingDialog;
 
 import javax.swing.*;
 import java.awt.*;
@@ -48,6 +49,7 @@ public class MainForm {
         this.fileChooser.addChoosableFileFilter(new P7FileChooseFilter());
 
         this.notSaveConfirmDialog = new NotSaveConfirmDialog();
+        this.settingDialog = new SettingDialog();
     }
 
     private final JFrame frame;
@@ -64,6 +66,7 @@ public class MainForm {
     private boolean isModify = false;
 
     private final NotSaveConfirmDialog notSaveConfirmDialog;
+    private final SettingDialog settingDialog;
 
     private void setOpenFile(File file) {
         this.openFile = file;
@@ -85,17 +88,56 @@ public class MainForm {
         initMenuItem(menu, "menu.file.menu.item.new_file.text", this::fileMenuNewItemOnClick, KeyEvent.VK_N);
         initMenuItem(menu, "menu.file.menu.item.open.text", this::fileMenuOpenItemOnClick, KeyEvent.VK_O);
         JMenu m = new JMenu(Text.translate("menu.file.menu.item.open_recent.text"));
-
-
+        JMenuItem item;
+        for (String s : ProjectOpenList.getList()) {
+            item = new JMenuItem(s);
+            item.addActionListener(e -> {
+                executor.submit(() -> {
+                    // open file openProjectFile(new File(absolutePath))
+                });
+            });
+            m.add(item);
+        }
         menu.add(m);
+        menu.addSeparator();
+        JMenuItem settingItem = initMenuItem(menu, "menu.file.menu.item.setting.text", this::openSettingForm, KeyEvent.VK_S);
+        settingItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.ALT_DOWN_MASK));
         menu.addSeparator();
         this.save = initMenuItem(menu, "menu.file.menu.item.save.text", this::fileMenuSaveItemOnClick, KeyEvent.VK_S);
         this.saveAs = initMenuItem(menu, "menu.file.menu.item.save_as.text", this::fileMenuSaveAsItemOnClick, KeyEvent.VK_A);
         menu.addSeparator();
+        // Add 'import' and 'export' item.
+        menu.addSeparator();
+        initMenuItem(menu, "menu.file.menu.item.exit.text", this::closingWindow, KeyEvent.VK_X);
         save.setEnabled(false);
         saveAs.setEnabled(false);
+        this.menuBar.add(menu);
 
 
+        menu = new JMenu(Text.translate("menu.edit.menu.title"));
+        menu.setMnemonic(KeyEvent.VK_E);
+        // Add 'Edit' menu component...
+        initMenuItem(menu, "menu.edit.menu.item.undo.text", this::undo, KeyEvent.VK_U);
+        initMenuItem(menu, "menu.edit.menu.item.redo.text", this::redo, KeyEvent.VK_R);
+        menu.addSeparator();
+        initMenuItem(menu, "menu.edit.menu.item.copy.text", this::copy, KeyEvent.VK_C);
+        initMenuItem(menu, "menu.edit.menu.item.cut.text", this::cut, KeyEvent.VK_T);
+        initMenuItem(menu, "menu.edit.menu.item.paste.text", this::paste, KeyEvent.VK_V);
+        initMenuItem(menu, "menu.edit.menu.item.delete.text", this::delete, KeyEvent.VK_D);
+        menu.addSeparator();
+        initMenuItem(menu, "menu.edit.menu.item.select_all.text", this::selectAll, KeyEvent.VK_A);
+        this.menuBar.add(menu);
+
+        menu = new JMenu(Text.translate("menu.window.menu.title"));
+        menu.setMnemonic(KeyEvent.VK_W);
+        // Add 'Window' menu component...
+
+        this.menuBar.add(menu);
+
+
+        menu = new JMenu(Text.translate("menu.help.menu.title"));
+        menu.setMnemonic(KeyEvent.VK_H);
+        // Add 'Help' menu component...
 
         this.menuBar.add(menu);
     }
@@ -134,11 +176,15 @@ public class MainForm {
         log.info("Open a project.");
         int result = this.fileChooser.showOpenDialog(this.mainPanel);
         if (result == JFileChooser.APPROVE_OPTION) {
-            this.setOpenFile(this.fileChooser.getSelectedFile());
-            log.debug(openFile);
-            this.project7 = this.reader.read(this.openFile);
-            ProjectOpenList.add(this.openFile.getAbsolutePath());
+            openProjectFile(this.fileChooser.getSelectedFile());
         }
+    }
+
+    private void openProjectFile(File file) {
+        this.setOpenFile(file);
+        log.debug(openFile);
+        this.project7 = this.reader.read(this.openFile);
+        ProjectOpenList.add(this.openFile.getAbsolutePath());
     }
 
     private void fileMenuSaveItemOnClick() {
@@ -164,25 +210,57 @@ public class MainForm {
         }
     }
 
+    private void undo() {
+        log.debug("Undo");
+    }
+
+    private void redo() {
+        log.debug("Redo");
+    }
+
+    private void copy() {
+        log.debug("Copy");
+    }
+
+    private void cut() {
+        log.debug("Cut");
+    }
+
+    private void paste() {
+        log.debug("Paste");
+    }
+
+    private void delete() {
+        log.debug("Delete");
+    }
+
+    private void selectAll() {
+        log.debug("Select all");
+    }
+
+    private void openSettingForm() {
+        log.debug("Open setting form");
+        this.settingDialog.setVisible(true);
+    }
+
     private void closingWindow() {
         log.info("Closing window.");
-
-        // Show Not Save Dialog.
-        this.notSaveConfirmDialog.setVisible(true);
-        int status = this.notSaveConfirmDialog.getStatus();
-        if (status == 0) {
-            // Save and exit
-            log.debug("Saving...");
-            saveProject();
-            log.debug("Save Success.");
-            exit();
-        } else if (status == 1) {
-            // Exit with no save
-            exit();
-        }
-
         if (this.isModify) {
-            // Show Not Save Dialog.↑
+            // Show Not Save Dialog.
+            this.notSaveConfirmDialog.setVisible(true);
+            int status = this.notSaveConfirmDialog.getStatus();
+            if (status == 0) {
+                // Save and exit
+                log.debug("Saving...");
+                saveProject();
+                log.debug("Save Success.");
+                exit();
+            } else if (status == 1) {
+                // Exit with no save
+                exit();
+            }
+        } else {
+            exit();
         }
     }
 

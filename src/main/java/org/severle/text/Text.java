@@ -5,11 +5,15 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class Text {
     public static String translate(String key) {
-        return Language.getInstance().getValue(key);
+        String s = Language.getInstance().getValue(key);
+        return s != null ? s : key;
     }
 
     public static String translate(String key, Object... paras) {
         String s = Language.getInstance().getValue(key);
+        if (s == null) {
+            return key;
+        }
         for (Object para : paras) {
             if (para instanceof String) {
                 s = s.replaceFirst("#s", para.toString());
