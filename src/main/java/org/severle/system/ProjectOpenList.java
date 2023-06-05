@@ -1,21 +1,24 @@
 package org.severle.system;
 
 import lombok.extern.log4j.Log4j2;
+import org.dom4j.Attribute;
+import org.dom4j.Element;
 
+import java.util.ArrayDeque;
 import java.util.Arrays;
-import java.util.Queue;
-import java.util.concurrent.ArrayBlockingQueue;
+import java.util.Deque;
+import java.util.List;
 
 @Log4j2
 public class ProjectOpenList {
-    private static final Queue<String> queue = new ArrayBlockingQueue<>(5);
+    public static final Deque<String> deque = new ArrayDeque<>(5);
 
     static {
-        queue.addAll(Arrays.asList(Initializer.getLastOpenProjects()));
+        deque.addAll(Arrays.asList(Initializer.getLastOpenProjects()));
     }
 
     public static String[] getList() {
-        Object[] array = queue.toArray();
+        Object[] array = deque.toArray();
         String[] strings = new String[5];
         for (int i = 0; i < 5; i++) {
             strings[i] = array[4 - i].toString();
@@ -24,9 +27,26 @@ public class ProjectOpenList {
     }
 
     public static boolean add(String s) {
-        if (queue.size() == 5) {
-            queue.poll();
+        // determine s is exist
+        boolean remove = deque.remove(s);
+        boolean isPoll = false;
+        if (deque.size() == 5) {
+            deque.poll();
+            isPoll = true;
         }
-        return queue.add(s);
+        boolean offer = deque.offer(s);
+        if ((remove || isPoll) && offer) {
+            // poll and offer a new one.should offer to settings.
+            Element lastOpen = Initializer.getLastOpenElement();
+            List<Element> list = lastOpen.elements();
+            String[] strings = getList();
+            for (int i = 0;i < 5;i++) {
+                Attribute value = list.get(i).attribute("value");
+                value.setValue(strings[4 - i]);
+            }
+            Initializer.flushSettings();
+            return true;
+        }
+        return offer;
     }
 }

@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-
+<?xml version="1.0" encoding="UTF-8"?>
 <settings>
-    <language value="zh-cn" />
+    <language value="zh-cn"/>
     <last-open>
-        <li id="1" value="a" />
-        <li id="2" value="b" />
-        <li id="3" value="c" />
-        <li id="4" value="d" />
-        <li id="5" value="e" />
+        <li id="1" value="./projects/d.p7"/>
+        <li id="2" value="./projects/e.p7"/>
+        <li id="3" value="./projects/f.p7"/>
+        <li id="4" value="./projects/c.p7"/>
+        <li id="5" value="D:\Workspace\Java\editor\projects\untitled.p7"/>
     </last-open>
-    <is-max-window value="false" />
+    <is-max-window value="false"/>
+    <project-repository value="./projects/"/>
 </settings>

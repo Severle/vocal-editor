@@ -1,9 +1,10 @@
 {
   "main.title": "编辑器",
-  "menu.file.menu.title": "文件",
-  "menu.file.menu.item.new_file.text": "新建",
-  "menu.file.menu.item.open.text": "打开",
-  "menu.file.menu.item.save.text": "保存",
-  "menu.file.menu.item.save_as.text": "另存为",
-  "menu.window.menu.title": "窗口"
+  "menu.file.menu.title": "文件(F)",
+  "menu.file.menu.item.new_file.text": "新建(N)",
+  "menu.file.menu.item.open.text": "打开(O)",
+  "menu.file.menu.item.open_recent.text": "最近工程",
+  "menu.file.menu.item.save.text": "保存(S)",
+  "menu.file.menu.item.save_as.text": "另存为(A)",
+  "menu.window.menu.title": "窗口(W)"
 }

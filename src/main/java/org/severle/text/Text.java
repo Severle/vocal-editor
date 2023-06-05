@@ -7,4 +7,20 @@ public class Text {
     public static String translate(String key) {
         return Language.getInstance().getValue(key);
     }
+
+    public static String translate(String key, Object... paras) {
+        String s = Language.getInstance().getValue(key);
+        for (Object para : paras) {
+            if (para instanceof String) {
+                s = s.replaceFirst("#s", para.toString());
+            } else if (para instanceof Integer) {
+                s = s.replaceFirst("#d", para.toString());
+            } else if (para instanceof Double) {
+                s = s.replaceFirst("#f", para.toString());
+            } else if (para instanceof Character){
+                s = s.replaceFirst("#c", para.toString());
+            }
+        }
+        return s.replaceAll("##", "#");
+    }
 }

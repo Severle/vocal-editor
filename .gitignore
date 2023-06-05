@@ -39,3 +39,6 @@ build/
 .DS_Store
 logs/latest.log
 /.idea/
+
+### Project ###
+/projects/
